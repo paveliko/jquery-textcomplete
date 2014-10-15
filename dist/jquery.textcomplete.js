@@ -283,6 +283,9 @@ if (typeof jQuery === 'undefined') {
 +function ($) {
   'use strict';
 
+
+
+
   var include = function (zippedData, datum) {
     var i, elem;
     var idProperty = datum.strategy.idProperty
@@ -337,14 +340,14 @@ if (typeof jQuery === 'undefined') {
     findOrCreateElement: function (option) {
       var $parent = option.appendTo;
       if (!($parent instanceof $)) { $parent = $($parent); }
-      var $el = $parent.children('.dropdown-menu')
+      var $el = $parent.children('.textcomplete-list')
       if (!$el.length) {
-        $el = $('<ul class="dropdown-menu"></ul>').css({
+        $el = $('<div class="textcomplete-list"></di>').css({
           display: 'none',
           left: 0,
           position: 'absolute',
           zIndex: option.zIndex
-        }).appendTo($parent);
+        }).appendTo('body'); // $parent - BUG FIX
       }
       return $el;
     }
@@ -598,17 +601,18 @@ if (typeof jQuery === 'undefined') {
         if (include(this.data, datum)) { continue; }
         index = this.data.length;
         this.data.push(datum);
-        html += '<li class="textcomplete-item" data-index="' + index + '"><a>';
+        html += '<div class="textcomplete-item" data-index="' + index + '">';
         html +=   datum.strategy.template(datum.value);
-        html += '</a></li>';
+        html += '</div>';
       }
       return html;
     },
 
+
     _renderHeader: function (unzippedData) {
       if (this.header) {
         if (!this._$header) {
-          this._$header = $('<li class="textcomplete-header"></li>').prependTo(this.$el);
+          this._$header = $('<div class="textcomplete-header"></div>').prependTo(this.$el);
         }
         var html = $.isFunction(this.header) ? this.header(unzippedData) : this.header;
         this._$header.html(html);
@@ -618,7 +622,7 @@ if (typeof jQuery === 'undefined') {
     _renderFooter: function (unzippedData) {
       if (this.footer) {
         if (!this._$footer) {
-          this._$footer = $('<li class="textcomplete-footer"></li>').appendTo(this.$el);
+          this._$footer = $('<div class="textcomplete-footer"></div>').appendTo(this.$el);
         }
         var html = $.isFunction(this.footer) ? this.footer(unzippedData) : this.footer;
         this._$footer.html(html);
