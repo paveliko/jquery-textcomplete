@@ -284,8 +284,6 @@ if (typeof jQuery === 'undefined') {
   'use strict';
 
 
-
-
   var include = function (zippedData, datum) {
     var i, elem;
     var idProperty = datum.strategy.idProperty
@@ -342,7 +340,7 @@ if (typeof jQuery === 'undefined') {
       if (!($parent instanceof $)) { $parent = $($parent); }
       var $el = $parent.children('.textcomplete-list')
       if (!$el.length) {
-        $el = $('<div class="textcomplete-list"></di>').css({
+        $el = $('<div class="textcomplete-list"></div>').css({
           display: 'none',
           left: 0,
           position: 'absolute',
@@ -363,7 +361,7 @@ if (typeof jQuery === 'undefined') {
     footer:    null,
     header:    null,
     id:        null,
-    maxCount:  10,
+    maxCount:  1000,
     placement: '',
     shown:     false,
     data:      [],     // Shown zipped data.
@@ -427,6 +425,7 @@ if (typeof jQuery === 'undefined') {
         this.$el.hide();
         if (this.className) { this.$el.removeClass(this.className); }
         this.completer.fire('textComplete:hide');
+        $(document).trigger('textComplete:hide');
         this.shown = false;
       }
       return this;
@@ -572,7 +571,9 @@ if (typeof jQuery === 'undefined') {
 
     _activateIndexedItem: function () {
       this.$el.find('.textcomplete-item.active').removeClass('active');
-      this._getActiveElement().addClass('active');
+      var activeElement = this._getActiveElement();
+      activeElement.addClass('active');
+      $(document).trigger( "activeItemSelected", [ activeElement ] );
     },
 
     _getActiveElement: function () {
